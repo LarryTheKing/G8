@@ -31,5 +31,16 @@ namespace G8
 
         return angle;
     }
+
+    inline int WrapAngle(int angle)
+    {
+        while(angle > 360)
+            angle -= 360;
+
+        while(angle < -360)
+            angle += 360;
+
+        return angle;
+    }
 }
 #endif
