@@ -3,6 +3,8 @@
 
 #include <FEHRPS.h>
 
+#include "core.h"
+#include "global.h"
 #include "mobility.h"
 
 namespace G8

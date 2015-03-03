@@ -1,12 +1,11 @@
 #include "navigation.h"
-#include "core.cpp"
 
 namespace G8
 {
     Navigation::Navigation(Mobility * const pMobility)
         : pSys(pMobility)
     {
-        offsetRPS = {0.0f, 0.0f, 0.0f };
+        offsetRPS.heading = offsetRPS.x = offsetRPS.y = 0.0f;
     }
 
     Position Navigation::UpdatePosition()
@@ -50,7 +49,7 @@ namespace G8
         UpdatePosition();
 
         float angle = CalcDegreesToRotate(currentPos.heading, heading);
-        pSys->RotateRight(angle);
+        pSys->RotateCCW(angle);
 
         angle = CalcDegreesToRotate(currentPos.heading, heading);
 
@@ -58,7 +57,7 @@ namespace G8
         {
             UpdatePosition();
             angle = CalcDegreesToRotate(currentPos.heading, heading);
-            pSys->RotateLeft(angle, COR_POWER);
+            pSys->RotateCCW(angle, CONST.GetVal<float>("COR_POWER", C_TYPE_INT));
 
         }
     }

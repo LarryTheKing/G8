@@ -2,10 +2,13 @@
 #include <FEHIO.h>
 #include <FEHUtility.h>
 
+
+
 #include "mobility.h"
 #include "navigation.h"
 
-#include "devices.cpp"
+#include "devices.h"
+#include "global.h"
 
 //Declarations for encoders & motors
 ButtonBoard buttons(FEHIO::Bank3);
@@ -20,13 +23,14 @@ AnalogInputPin  cds_cell(FEHIO::P1_0);
 
 int main(void)
 {
+    G8::DefineConstants();
     using namespace G8;
 
     LCD.Clear( FEHLCD::Black );
     LCD.SetFontColor( FEHLCD::White );
 
-    MobilitySystem * mSys
-            = new MobilitySystem(&right_encoder, &left_encoder,
+    Mobility * mSys
+            = new Mobility(&right_encoder, &left_encoder,
                                  &right_motor, &left_motor);
 
     RPS.InitializeMenu();

@@ -4,14 +4,20 @@ namespace G8
 {
     Robot::Robot(void)
     {
-        ButtonBoard buttons(FEHIO::Bank3);
+        pButtons = new ButtonBoard(FEHIO::Bank3);
 
-        DigitalEncoder right_encoder(FEHIO::P0_0);
-        DigitalEncoder left_encoder(FEHIO::P0_1);
+        pRight_encoder = new DigitalEncoder(FEHIO::P0_0);
+        pLeft_encoder = new DigitalEncoder(FEHIO::P0_0);
 
-        FEHMotor right_motor(FEHMotor::Motor0);
-        FEHMotor left_motor(FEHMotor::Motor1);
+        pRight_motor = new FEHMotor(FEHMotor::Motor0);
+        pLeft_motor  = new FEHMotor(FEHMotor::Motor1);
 
-        AnalogInputPin  cds_cell(FEHIO::P1_0);
+        pCds_cell = new AnalogInputPin(FEHIO::P1_0);
+
+        pMob = new Mobility(pRight_encoder, pLeft_encoder, pRight_motor, pLeft_motor);
+
+        RPS.InitializeMenu();
+
+        pNav = new Navigation(pMob);
     }
 }

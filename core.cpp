@@ -1,17 +1,8 @@
-#ifndef CORE
-#define CORE
+#include "core.h"
 
 namespace G8
 {
-    /**
-     * @brief Clamp Returns a value within a range
-     * @param val   The value to clamp
-     * @param min   The minimum value
-     * @param max   The maximum value
-     * @return      Returns val >= min and <= max
-     * @requires    val, min, max are all valid floating point values
-     */
-    inline float Clamp(float const val, float const min, float const max)
+    float Clamp(float const val, float const min, float const max)
     {
         if(val < min)
             return min;
@@ -21,7 +12,7 @@ namespace G8
         return val;
     }
 
-    inline float WrapAngle(float angle)
+    float WrapAngle(float angle)
     {
         while(angle > 360.0f)
             angle -= 360.0f;
@@ -32,7 +23,7 @@ namespace G8
         return angle;
     }
 
-    inline int WrapAngle(int angle)
+    int WrapAngleI(int angle)
     {
         while(angle > 360)
             angle -= 360;
@@ -42,5 +33,16 @@ namespace G8
 
         return angle;
     }
+
+    float CalcDegreesToRotate(float current, float desired)
+    {
+       float Diff = desired - current;
+       if(Diff > 180.0f)
+          return Diff - 360.0f;
+       else if(Diff < -180.0f)
+          return Diff + 360.0f;
+
+       return Diff;
+    }
 }
-#endif
+

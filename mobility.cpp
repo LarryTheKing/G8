@@ -5,13 +5,12 @@ namespace G8
     /**
     * @brief InchToTick Converts a distance and power to number of ticks
     * @param distance   The distance in inches
-    * @param power      The motor power
     *
-    * @requires 0 < Power <= 100 and Distance > 0
+    * @requires Distance > 0
     */
-    int InchToTick(float distance, int power)
+    int InchToTick(float distance)
     {
-        return distance * TICK_INCH;// * TICK_POWER / power;
+        return distance * CONST.GetVal<float>("TICK_INCH", C_TYPE_FLOAT);
     }
 
     /**
@@ -23,22 +22,22 @@ namespace G8
     */
     int DegToTick(float angle)
     {
-        float val = angle * TICK_DEG;
+        float val = angle * CONST.GetVal<float>("TICK_DEG", C_TYPE_FLOAT);
         return (val > 0 ? val : -val);
     }
 
-    void Mobility::DriveForward(float inches, int power)
+    void Mobility::DriveForward(float inches, float percentPower)
     {
         //Reset encoder counts
         pEncoderR->ResetCounts();
         pEncoderL->ResetCounts();
 
         // Calculate how many ticks we'll encounter
-        int counts = InchToTick(inches > 0 ? inches : -inches, power);
+        int counts = InchToTick(inches > 0 ? inches : -inches);
 
         //Set both motors to desired percent
-        pMotorR->SetPercent((inches > 0 ? power : - power) * MOD_RIGHT);
-        pMotorL->SetPercent((inches > 0 ? power : - power) * MOD_LEFT);
+        pMotorR->SetPercent((inches > 0 ? percentPower : - percentPower) * CONST.GetVal<float>("MOD_RIGHT", C_TYPE_FLOAT));
+        pMotorL->SetPercent((inches > 0 ? percentPower : - percentPower) * CONST.GetVal<float>("MOD_LEFT", C_TYPE_FLOAT));
 
         //While the average of the left and right encoder are less than counts,
         //keep running motors
@@ -49,12 +48,12 @@ namespace G8
         pMotorL->Stop();
     }
 
-    void Mobility::DriveBackward(float inches, int power)
+    void Mobility::DriveBackward(float inches, float percentPower)
     {
-        DriveForward(-inches, power);
+        DriveForward(-inches, percentPower);
     }
 
-    void Mobility::RotateCCW(float deg, float power)
+    void Mobility::RotateCCW(float deg, float percentPower)
     {
         //Reset encoder counts
         pEncoderR->ResetCounts();
@@ -64,8 +63,8 @@ namespace G8
         int counts = DegToTick(deg);
 
         //Set both motors to desired percent
-        pMotorR->SetPercent((deg > 0 ? power : -power) * MOD_RIGHT);
-        pMotorL->SetPercent((deg > 0 ? -power : power) * MOD_LEFT);
+        pMotorR->SetPercent((deg > 0 ? percentPower : -percentPower) * CONST.GetVal<float>("MOD_RIGHT", C_TYPE_FLOAT));
+        pMotorL->SetPercent((deg > 0 ? -percentPower : percentPower) * CONST.GetVal<float>("MOD_LEFT", C_TYPE_FLOAT));
 
         //While the average of the left and right encoder are less than counts,
         //keep running motors
@@ -76,8 +75,13 @@ namespace G8
         pMotorL->Stop();
     }
 
-    void Mobility::RotateCW(float deg, float power)
+    void Mobility::RotateCW(float deg, float percentPower)
     {
-        RotateLeft(-deg, power);
+        RotateCCW(-deg, percentPower);
     }
+
+    void Mobility::RotateCCW(float deg){
+        RotateCCW(deg, CONST.GetVal<int>("ROT_POWER", C_TYPE_INT));}
+    void Mobility::RotateCW(float deg){
+        RotateCCW(-deg, CONST.GetVal<int>("ROT_POWER", C_TYPE_INT));}
 }

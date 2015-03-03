@@ -10,8 +10,6 @@
 
 namespace G8
 {
-    ButtonBoard buttons(FEHIO::Bank3);
-
     class Robot
     {
     public:
