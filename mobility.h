@@ -19,7 +19,7 @@
 
 namespace G8
 {
-    class MobilitySystem
+    class Mobility
     {
     private:
         DigitalEncoder * pEncoderR;
@@ -27,7 +27,7 @@ namespace G8
         FEHMotor * pMotorR;
         FEHMotor * pMotorL;
     public:
-        MobilitySystem(DigitalEncoder * const pRightEncoder,
+        Mobility(DigitalEncoder * const pRightEncoder,
                        DigitalEncoder * const pLeftEncoder,
                        FEHMotor * const pRightMotor,
                        FEHMotor * const pLeftMotor) :
@@ -54,20 +54,20 @@ namespace G8
         void DriveBackward(float inches, int power);
 
         /**
-         * @brief RotateLeft    Rotates the robot left some degrees
+         * @brief RotateLeft    Rotates the robot counter clockwise some degrees
          * @param deg           The angle in degrees to rotate
          *
          * @requires            -180 < deg <= 180
          */
-        void RotateLeft(float deg, float power = ROT_POWER);
+        void RotateCCW(float deg, float power = ROT_POWER);
 
         /**
-         * @brief RotateRight    Rotates the robot right some degrees
+         * @brief RotateCW      Rotates the robot clockwise some degrees
          * @param deg           The angle in degrees to rotate
          *
          * @requires            -180 < deg <= 180
          */
-        void RotateRight(float deg, float power = ROT_POWER);
+        void RotateCW(float deg, float power = ROT_POWER);
     };
 }
 

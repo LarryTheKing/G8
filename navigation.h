@@ -17,7 +17,7 @@ namespace G8
     class Navigation
     {
     private:
-        MobilitySystem * pSys;
+        Mobility * pSys;
 
         Position currentPos;    // The adjusted current position
         Position offsetRPS;     // The offset from RPS to current position
@@ -25,11 +25,11 @@ namespace G8
     public:
         /**
          * @brief Navigation
-         * @param pMobilitySystem   The mobility system to be used in navigation
+         * @param pMobility   The mobility system to be used in navigation
          *
          * @requires RPS has been initialised
          */
-        Navigation(MobilitySystem * const pMobilitySystem);
+        Navigation(Mobility * const pMobility);
 
         /**
          * @brief Fetches RPS position and offsets it
@@ -61,7 +61,7 @@ namespace G8
 
     public:
         // Returns a pointer to the mobility system
-        MobilitySystem * const GetMobilitySystem(void) { return pSys; }
+        Mobility * const GetMobility(void) { return pSys; }
 
         // Returns teh current position
         Position GetPosition(void) const { return currentPos; }

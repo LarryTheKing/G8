@@ -27,7 +27,7 @@ namespace G8
         return (val > 0 ? val : -val);
     }
 
-    void MobilitySystem::DriveForward(float inches, int power)
+    void Mobility::DriveForward(float inches, int power)
     {
         //Reset encoder counts
         pEncoderR->ResetCounts();
@@ -49,12 +49,12 @@ namespace G8
         pMotorL->Stop();
     }
 
-    void MobilitySystem::DriveBackward(float inches, int power)
+    void Mobility::DriveBackward(float inches, int power)
     {
         DriveForward(-inches, power);
     }
 
-    void MobilitySystem::RotateLeft(float deg, float power)
+    void Mobility::RotateCCW(float deg, float power)
     {
         //Reset encoder counts
         pEncoderR->ResetCounts();
@@ -76,7 +76,7 @@ namespace G8
         pMotorL->Stop();
     }
 
-    void MobilitySystem::RotateRight(float deg, float power)
+    void Mobility::RotateCW(float deg, float power)
     {
         RotateLeft(-deg, power);
     }

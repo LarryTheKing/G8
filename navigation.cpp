@@ -3,8 +3,8 @@
 
 namespace G8
 {
-    Navigation::Navigation(MobilitySystem * const pMobilitySystem)
-        : pSys(pMobilitySystem)
+    Navigation::Navigation(Mobility * const pMobility)
+        : pSys(pMobility)
     {
         offsetRPS = {0.0f, 0.0f, 0.0f };
     }
