@@ -3,6 +3,7 @@
 #include <FEHUtility.h>
 
 #include "mobility.h"
+#include "navigation.h"
 
 #include "devices.cpp"
 
@@ -19,6 +20,8 @@ AnalogInputPin  cds_cell(FEHIO::P1_0);
 
 int main(void)
 {
+    using namespace G8;
+
     LCD.Clear( FEHLCD::Black );
     LCD.SetFontColor( FEHLCD::White );
 
@@ -26,17 +29,31 @@ int main(void)
             = new MobilitySystem(&right_encoder, &left_encoder,
                                  &right_motor, &left_motor);
 
-    while(GetCdSIntensity(&cds_cell) > 0.2f);
+    RPS.InitializeMenu();
 
-    mSys->DriveForward(14.0, 70);
+    Navigation * pNav = new Navigation(mSys);
 
-    mSys->RotateLeft(90.0f);
+    pNav->CalibrateHeading(270);
 
-    mSys->DriveForward(11.5, 70);
+    LCD.WriteLine("0 deg");
+    pNav->RotateTo(0.0f);
 
-    mSys->RotateLeft(90.0f);
+    Sleep(2000);
 
-    mSys->DriveForward(42.0, 70);
+    LCD.WriteLine("90 deg");
+    pNav->RotateTo(90.0f);
+
+    Sleep(2000);
+
+    LCD.WriteLine("270 deg");
+    pNav->RotateTo(270.0f);
+
+    Sleep(2000);
+
+    LCD.WriteLine("180 deg");
+    pNav->RotateTo(180.0f);
+
+    Sleep(2000);
 
     return 0;
 }
