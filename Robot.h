@@ -28,6 +28,7 @@ namespace G8
         Navigation *    pNav;
 
         Robot(void);
+        ~Robot(void);
     };
 }
 

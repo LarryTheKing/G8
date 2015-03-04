@@ -6,6 +6,14 @@ namespace G8
 
     void DefineConstants(void)
     {
+        // Robot constants
+        CONST.Add<int>  ("BANK_BB",     3, C_TYPE_INT); // Button Board FEHIO::Bank3
+        CONST.Add<int>  ("PIN_RENCODE", 0, C_TYPE_INT); // Right Encoder FEHIO::P0_0
+        CONST.Add<int>  ("PIN_LENCODE", 2, C_TYPE_INT); // Left Encoder FEHIO::P0_2
+        CONST.Add<int>  ("MOT_RIGHT",   0, C_TYPE_INT); // Right Motor FEHMotor::Motor0
+        CONST.Add<int>  ("MOT_LEFT",    1, C_TYPE_INT); // Left Motor FEHMotor::Motor1
+        CONST.Add<int>  ("PIN_CDS",     8, C_TYPE_INT); // CdS Cell FEHIO::P1_0
+
         // Devices constants
         CONST.Add<int>  ("CDS_SAMPLES", 3, C_TYPE_INT);
         CONST.Add<float>("MAX_VOLT",    3.3f, C_TYPE_FLOAT);

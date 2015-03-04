@@ -13,7 +13,6 @@ namespace G8
     ///////////////////////////////////////////////////
     // CdS Cell section
     ///////////////////////////////////////////////////
-
     /**
     * Reads the avreage intensity from a CdS cell
     * @param pPin   The AnalogInputPin to read from
