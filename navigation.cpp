@@ -53,13 +53,73 @@ namespace G8
 
         angle = CalcDegreesToRotate(currentPos.heading, heading);
 
-        while(angle >  1.0f  || angle < -1.0f)
+        // What are our tolerances
+        const float ROT_TOL = CONST.GetVal<float>("ROT_TOL", C_TYPE_FLOAT);
+        const float COR_POWER = CONST.GetVal<float>("COR_POWER", C_TYPE_FLOAT);
+
+        // How many times to try and correct
+        int nCorrections = CONST.GetVal<int>("MAX_COR", C_TYPE_INT);
+
+        while((angle >  ROT_TOL  || angle < -ROT_TOL) && (nCorrections-- > 0))
         {
             UpdatePosition();
             angle = CalcDegreesToRotate(currentPos.heading, heading);
-            pSys->RotateCCW(angle, CONST.GetVal<float>("COR_POWER", C_TYPE_INT));
+            pSys->RotateCCW(angle, COR_POWER);
 
         }
+    }
+
+    float distSquared(Position const a, Position const b)
+    {
+        float x = (b.x - a.x);
+        x *= x;
+
+        float y = (b.y - a.y);
+        y *= y;
+
+        return x + y;
+    }
+
+    void Navigation::DriveForward(float inches, float percentPower)
+    {
+        Position start = UpdatePosition();
+        pSys->DriveForward(inches, percentPower);
+
+        // How far off are we
+        float inchesSq = inches * inches;
+        float disp = inchesSq - distSquared(start, UpdatePosition());
+
+        // What are our tolerances
+        float MOV_TOL_SQ = CONST.GetVal<float>("MOV_TOL", C_TYPE_FLOAT);
+        MOV_TOL_SQ *= MOV_TOL_SQ;
+        const float COR_POWER = CONST.GetVal<float>("COR_POWER", C_TYPE_FLOAT);
+
+        // How many times to try and correct
+        int nCorrections = CONST.GetVal<int>("MAX_COR", C_TYPE_INT);
+
+        while((disp > MOV_TOL_SQ || disp < -MOV_TOL_SQ) && (nCorrections-- > 0))
+        {
+            if(inches > 0.0f) { // Was this really a forward movement
+                if(disp > 0.0f)
+                    pSys->DriveForward(sqrtf(disp), COR_POWER);  // Not there yet, keep moving forwards
+                else
+                    pSys->DriveBackward(sqrtf(-disp), COR_POWER);// Overshot, move backward
+            } else {            // Was this a backward movement in disguise?!
+                if(disp > 0.0f)
+                    pSys->DriveBackward(sqrtf(disp), COR_POWER); // Not there yet, keep moving backwards
+                else
+                    pSys->DriveForward(sqrtf(-disp), COR_POWER); // Overshot, move forward
+            }
+
+            // What is our new displacement?
+            disp = inchesSq - distSquared(start, UpdatePosition());
+        }
+
+    }
+
+    void Navigation::DriveBackward(float inches, float percentPower)
+    {
+        DriveForward(inches, percentPower);
     }
 }
 

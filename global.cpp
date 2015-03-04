@@ -21,5 +21,10 @@ namespace G8
 
         CONST.Add<int>  ("COR_POWER",   55, C_TYPE_INT);
         CONST.Add<int>  ("ROT_POWER",   60, C_TYPE_INT);
+
+        // Navigation constants
+        CONST.Add<int>  ("MAX_COR", 4, C_TYPE_INT);         // The max number tries to correct
+        CONST.Add<float>("MOV_TOL", 0.5f, C_TYPE_FLOAT);    // Movement tolerance
+        CONST.Add<float>("ROT_TOL", 1.0f, C_TYPE_FLOAT);    // Rotation tolerance
     }
 }

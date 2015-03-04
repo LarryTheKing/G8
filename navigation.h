@@ -2,6 +2,7 @@
 #define NAVIGATION_H
 
 #include <FEHRPS.h>
+#include <math.h>
 
 #include "core.h"
 #include "global.h"
@@ -76,6 +77,21 @@ namespace G8
          * @requires RPS is active
          */
         void RotateTo(float heading);
+
+        /**
+         * @brief Drives the robot forward a specified distance
+         * @param inches        The distance to travel
+         * @param percentPower  The desired power as a percent
+         */
+        void DriveForward(float inches, float percentPower);
+
+        /**
+         * @brief Drives the robot backward a specified distance
+         * @param inches        The distance to travel
+         * @param percentPower  The desired power as a percent
+         */
+        void DriveBackward(float inches, float percentPower);
+
 
     };
 }
