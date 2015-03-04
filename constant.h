@@ -10,6 +10,7 @@
 
 #define C_TYPE_NONE     0x00
 #define C_TYPE_POINTER  0x80000000
+#define C_TYPE_UNSIGNED 0x40000000
 
 #define C_TYPE_INT      0x01
 #define C_TYPE_FLOAT    0x02
