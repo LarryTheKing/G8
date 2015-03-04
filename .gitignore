@@ -26,3 +26,12 @@
 *.exe
 *.out
 *.app
+
+# Qt Junk
+*.d
+*.map
+*.config
+*.creator
+*.elf
+*.includes
+*.s19
