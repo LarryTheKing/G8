@@ -55,13 +55,21 @@ namespace G8
         TASK_RESULT RunTask(char const * const pName, Robot * const pRobot) const;
 
         /**
-         * @brief Selects a Task from a menu and runs the TaskFunction using the robot
-         * @param pRobot    The Robot to run the task using
-         * @return RunTaskFromMenu = the return value from the Task
+         * @brief   Selects a Task from a menu and runs the TaskFunction using the robot
+         * @param   pRobot    The Robot to run the task using
+         * @return  RunTaskFromMenu = the return value from the Task
          */
         TASK_RESULT RunTaskFromMenu(Robot * const pRobot) const ;
 
-        void AddTask(char const * const pName, TaskFunction pFunc);
+        /**
+         * @brief Adds a task to the TaskSystem
+         * @param pName The name of the task
+         * @param pFunc The pointer to the function
+         *
+         * @requires pName is a valid c-string no longer than 24 chars ('\0' included)
+         *  pFunc is a valid pointer to a function
+         */
+        bool AddTask(char const * const pName, TaskFunction pFunc);
     };
 }
 
