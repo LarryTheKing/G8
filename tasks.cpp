@@ -8,11 +8,15 @@ namespace Tasks
 {
     TASK_RESULT Main(Robot * const pRob)
     {
+        LCD.WriteLine("Hey guys, we should really\nwork on the main code\nsometime soon.\n-Larry");
+        Sleep(4000);
         return TASK_RESULT_SUCCESS;
     }
 
     TASK_RESULT Diagnostics(Robot * const pRob)
     {
+        LCD.WriteLine("No diagnostics here!\n-Larry");
+        Sleep(4000);
         return TASK_RESULT_SUCCESS;
     }
 
