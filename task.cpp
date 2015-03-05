@@ -1,5 +1,6 @@
 #include "task.h"
-#include <cstring>
+
+#define nullptr NULL
 
 namespace G8
 {

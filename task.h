@@ -2,7 +2,7 @@
 #define TASK_H
 
 #include <stdlib.h>
-#include "robot.h"
+#include <string.h>
 #include "ui.h"
 
 #define TASK_RESULT_FAIL        80000000
@@ -12,6 +12,8 @@
 
 namespace G8
 {
+    class Robot;
+
     typedef size_t TASK_RESULT;
 
     typedef TASK_RESULT (*TaskFunction) (Robot *);
