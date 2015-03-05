@@ -1,8 +1,11 @@
 #include "global.h"
+#include "tasks.h"
 
 namespace G8
 {
     CONSTANT_SYS CONST;
+
+    TaskSystem   TASK("Main task menu");
 
     void DefineConstants(void)
     {
@@ -35,5 +38,12 @@ namespace G8
         CONST.Add<int>  ("MAX_COR", 4, C_TYPE_INT);         // The max number tries to correct
         CONST.Add<float>("MOV_TOL", 0.5f, C_TYPE_FLOAT);    // Movement tolerance
         CONST.Add<float>("ROT_TOL", 1.0f, C_TYPE_FLOAT);    // Rotation tolerance
+    }
+
+    void DefineTasks(void)
+    {
+        TASK.AddTask("Main",            Tasks::Main);
+        TASK.AddTask("Diagnostics",     Tasks::Diagnostics);
+        TASK.AddTask("Perf Test 1",     Tasks::PerfTest1);
     }
 }
