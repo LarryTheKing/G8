@@ -23,14 +23,15 @@ namespace G8
 
         // Mobility constants
         CONST.Add<float>("TICK_INCH",   2.778f, C_TYPE_FLOAT);
-        CONST.Add<float>("TICK_DEG",    85.5f / 360.0f, C_TYPE_FLOAT);
+        CONST.Add<float>("TICK_DEG",    80.0f / 360.0f, C_TYPE_FLOAT);
         CONST.Add<float>("MOD_LEFT",    59.0f / 60.0f, C_TYPE_FLOAT);
         CONST.Add<float>("MOD_RIGHT",   1.0f, C_TYPE_FLOAT);
 
-        CONST.Add<int>  ("COR_POWER",   55, C_TYPE_INT);
-        CONST.Add<int>  ("ROT_POWER",   60, C_TYPE_INT);
+        CONST.Add<float>("COR_POWER",   55.0f, C_TYPE_FLOAT);
+        CONST.Add<float>("ROT_POWER",   60.0f, C_TYPE_FLOAT);
 
-        // Navigation constants
+        // Navigation constantsm
+        CONST.Add<int>  ("RPS_SAMPLES", 3, C_TYPE_INT);
         CONST.Add<int>  ("MAX_COR", 4, C_TYPE_INT);         // The max number tries to correct
         CONST.Add<float>("MOV_TOL", 0.5f, C_TYPE_FLOAT);    // Movement tolerance
         CONST.Add<float>("ROT_TOL", 1.0f, C_TYPE_FLOAT);    // Rotation tolerance

@@ -12,9 +12,26 @@ namespace G8
     {
         // Get RPS position information and offset it
         Position rps;
+
         rps.heading = WrapAngle(RPS.Heading() + offsetRPS.heading);
         rps.x       = RPS.X() + offsetRPS.x;
         rps.y       = RPS.Y() + offsetRPS.y;
+
+        const int nSamples = CONST.GetVal<int>("RPS_SAMPLES", C_TYPE_INT);
+        if(nSamples > 1)
+        {
+            for(int i = 1; i < nSamples; i++)
+            {
+                Sleep(20);
+                rps.heading += WrapAngle(RPS.Heading() + offsetRPS.heading);
+                rps.x       += RPS.X() + offsetRPS.x;
+                rps.y       += RPS.Y() + offsetRPS.y;
+            }
+
+            rps.heading /= nSamples;
+            rps.x /= nSamples;
+            rps.y /= nSamples;
+        }
 
         currentPos = rps;
 
@@ -33,6 +50,9 @@ namespace G8
         // Return the difference between the current heading
         // and the expected heading
         offsetRPS.heading = newHeading - headingRPS;
+
+        LCD.Write("H Offset : ");
+        LCD.WriteLine(offsetRPS.heading);
     }
 
     void Navigation::CalibrateX(float pos)
@@ -47,11 +67,26 @@ namespace G8
     void Navigation::RotateTo(float heading)
     {
         UpdatePosition();
-
         float angle = CalcDegreesToRotate(currentPos.heading, heading);
+
+        LCD.Write("Current : ");
+        LCD.WriteLine(currentPos.heading);
+        LCD.Write("Desired : ");
+        LCD.WriteLine(heading);
+        LCD.Write("Offset : ");
+        LCD.WriteLine(angle);
+
         pSys->RotateCCW(angle);
 
+        UpdatePosition();
         angle = CalcDegreesToRotate(currentPos.heading, heading);
+
+        LCD.Write("-Current : ");
+        LCD.WriteLine(currentPos.heading);
+        LCD.Write("-Desired : ");
+        LCD.WriteLine(heading);
+        LCD.Write("-Offset : ");
+        LCD.WriteLine(angle);
 
         // What are our tolerances
         const float ROT_TOL = CONST.GetVal<float>("ROT_TOL", C_TYPE_FLOAT);
@@ -64,8 +99,11 @@ namespace G8
         {
             UpdatePosition();
             angle = CalcDegreesToRotate(currentPos.heading, heading);
-            pSys->RotateCCW(angle, COR_POWER);
 
+            LCD.Write("-Correction : ");
+            LCD.WriteLine(angle);
+
+            pSys->RotateCCW(angle, COR_POWER);
         }
     }
 

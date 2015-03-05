@@ -1,6 +1,7 @@
 #ifndef NAVIGATION_H
 #define NAVIGATION_H
 
+#include <FEHLCD.h>
 #include <FEHRPS.h>
 #include <math.h>
 

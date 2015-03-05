@@ -35,6 +35,9 @@ namespace G8
         // Calculate how many ticks we'll encounter
         int counts = InchToTick(inches > 0 ? inches : -inches);
 
+        if(counts == 0) {
+            counts = 1; }
+
         //Set both motors to desired percent
         pMotorR->SetPercent((inches > 0 ? percentPower : - percentPower) * CONST.GetVal<float>("MOD_RIGHT", C_TYPE_FLOAT));
         pMotorL->SetPercent((inches > 0 ? percentPower : - percentPower) * CONST.GetVal<float>("MOD_LEFT", C_TYPE_FLOAT));
@@ -75,13 +78,44 @@ namespace G8
         pMotorL->Stop();
     }
 
-    void Mobility::RotateCW(float deg, float percentPower)
-    {
-        RotateCCW(-deg, percentPower);
-    }
+    void Mobility::RotateCW(float deg, float percentPower) {
+        RotateCCW(-deg, percentPower); }
 
     void Mobility::RotateCCW(float deg){
-        RotateCCW(deg, CONST.GetVal<int>("ROT_POWER", C_TYPE_INT));}
+        RotateCCW(deg, CONST.GetVal<float>("ROT_POWER", C_TYPE_FLOAT));}
     void Mobility::RotateCW(float deg){
-        RotateCCW(-deg, CONST.GetVal<int>("ROT_POWER", C_TYPE_INT));}
+        RotateCCW(-deg, CONST.GetVal<float>("ROT_POWER", C_TYPE_FLOAT));}
+
+    void Mobility::StrafeCCW(float deg, float percentPower)
+    {
+        //Reset encoder counts
+        pEncoderR->ResetCounts();
+        pEncoderL->ResetCounts();
+
+        // Calculate how many ticks we'll encounter
+        int counts = DegToTick(deg);
+
+        //Set both motors to desired percent
+        if(deg > 0)
+            pMotorR->SetPercent(percentPower * CONST.GetVal<float>("MOD_RIGHT", C_TYPE_FLOAT));
+        else
+            pMotorL->SetPercent(percentPower * CONST.GetVal<float>("MOD_LEFT", C_TYPE_FLOAT));
+
+        //While the average of the left and right encoder are less than counts,
+        //keep running motors
+        while((pEncoderL->Counts() + pEncoderR->Counts()) / 2 < counts);
+
+        //Turn off motors
+        pMotorR->Stop();
+        pMotorL->Stop();
+    }
+
+    void Mobility::StrafeCW(float deg, float percentPower) {
+        StrafeCCW(-deg, percentPower); }
+
+    void Mobility::StrafeCCW(float deg){
+        StrafeCCW(deg, CONST.GetVal<float>("ROT_POWER", C_TYPE_FLOAT));}
+    void Mobility::StrafeCW(float deg){
+        StrafeCCW(-deg, CONST.GetVal<float>("ROT_POWER", C_TYPE_FLOAT));}
+
 }

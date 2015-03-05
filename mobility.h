@@ -64,6 +64,27 @@ namespace G8
          */
         void RotateCW(float deg, float percentPower);
         void RotateCW(float deg);
+
+        /**
+         * @brief StrafeCCW     Strafes the robot counter-clockwise some degrees
+         * @param deg           The angle in degrees to rotate
+         * @param percentPower  The power to rotate at
+         *
+         * @requires            -180 < deg <= 180
+         */
+        void StrafeCCW(float deg, float percentPower);
+        void StrafeCCW(float deg);
+
+
+        /**
+         * @brief StrafeCW      Strafes the robot clockwise some degrees
+         * @param deg           The angle in degrees to rotate
+         * @param percentPower  The power to rotate at
+         *
+         * @requires            -180 < deg <= 180
+         */
+        void StrafeCW(float deg, float percentPower);
+        void StrafeCW(float deg);
     };
 }
 
