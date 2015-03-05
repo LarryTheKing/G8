@@ -1,6 +1,9 @@
 #include "ui.h"
+#include "constant.h"
 
 namespace G8 {
+
+extern CONSTANT_SYS CONST;
 
 namespace UI
 {
@@ -84,8 +87,9 @@ namespace UI
                 {
                     if(row < ITEMS_PAGE){
                         int nIndex = page * ITEMS_PAGE + row;
-                        if(nIndex < nItems)
-                            return nIndex;
+                        if(nIndex < nItems){
+                            LCD.Clear();
+                            return nIndex;}
                         else
                             buzz.Buzz(60);
                     }

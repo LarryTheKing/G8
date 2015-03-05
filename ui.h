@@ -7,8 +7,6 @@
 #include <FEHIO.h>
 #include <FEHBuzzer.h>
 
-#include "global.h"
-
 #define BUTTON_NONE     0x00
 #define BUTTON_LEFT     0x01
 #define BUTTON_CENTER   0x02
