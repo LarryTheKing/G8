@@ -58,8 +58,7 @@ namespace UI
     {
         FEHBuzzer buzz;
 
-        ButtonBoard * pBB = new ButtonBoard(
-                    static_cast<FEHIO::FEHIOPort>(CONST.GetVal<int>("BANK_BB", C_TYPE_INT)));
+        ButtonBoard BB(static_cast<FEHIO::FEHIOPort>(CONST.GetVal<int>("BANK_BB", C_TYPE_INT)));
 
         const size_t nPages = nItems / ITEMS_PAGE + 1;
         size_t page = 0;
@@ -119,9 +118,158 @@ namespace UI
             LCD.Write(" / ");
             LCD.WriteLine(static_cast<int>(nPages));
 
-            b = waitForPress(pBB);
+            b = waitForPress(&BB);
         } while(b != BUTTON_NONE);
     }
+
+    #define N_PLACES    10
+    #define PAD_Y       3
+    #define ASCII_NUM_START 0x30
+    long long GetLongLong(const char * const pTitle, long long old, bool sign)
+    {
+        ButtonBoard BB(static_cast<FEHIO::FEHIOPort>(CONST.GetVal<int>("BANK_BB", C_TYPE_INT)));
+
+        char vals[N_PLACES + 1] = {0};
+
+        long long place = 1000000000;
+        for(int i = N_PLACES - 1; i >= 0; i--)
+        {
+            vals[i] = old / place;
+            old %= place;
+            place /= 10;
+        }
+
+        int     nIndex = 0;
+        bool    editMode = false;
+
+        BUTTON b = BUTTON_NONE;
+
+        do {
+            if(!editMode)
+            {
+                if(b == BUTTON_LEFT)
+                    nIndex = (nIndex < N_PLACES + 1 ? nIndex + 1 : 0);
+                else if(b == BUTTON_RIGHT)
+                    nIndex = (nIndex == 0 ? N_PLACES + 1 : nIndex - 1);
+                else if(b == BUTTON_CENTER)
+                {
+                    if(nIndex == N_PLACES)
+                    {
+                        if(sign)
+                        {
+                            if(vals[N_PLACES] == 0)
+                                vals[N_PLACES] = 1;
+                            else
+                                vals[N_PLACES] = 0;
+                        }
+                    }
+                    else if(nIndex != N_PLACES + 1)
+                        editMode = true;
+                    else
+                    {
+                        long long sum = vals[0];
+                        long long place = 10;
+                        for(int i = 1; i < N_PLACES; i++)
+                        {
+                            sum += vals[i] * place;
+                            place *= 10;
+                        }
+
+                        if(vals[N_PLACES] == 1)
+                            return -sum;
+
+                        return sum;
+                    }
+                }
+            } else {
+                if(b == BUTTON_CENTER)
+                    editMode = false;
+                else if(nIndex < N_PLACES)
+                {
+                    if(b == BUTTON_LEFT)
+                        vals[nIndex] = (vals[nIndex] > 0 ? vals[nIndex] - 1 : 9);
+                    else if(b == BUTTON_RIGHT)
+                        vals[nIndex] = (vals[nIndex] < 9 ? vals[nIndex] + 1 : 0);
+                }
+            }
+
+            // Clear the screen and write the title
+            LCD.Clear();
+            if(pTitle){
+                LCD.WriteLine(pTitle); }
+
+            // Pad Y
+            for(int i = 0; i < PAD_Y; i++)
+                LCD.WriteLine(' ');
+
+            // Draw top markers
+            LCD.Write(nIndex == N_PLACES + 1 ? "  ||||  " : "        ");
+            LCD.Write(nIndex == N_PLACES ? "| " : "  ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write(i == nIndex ? (editMode ? '^' : '|') : ' ');
+                if(i % 3 == 0 && i != 0)
+                    LCD.Write(' ');
+            }
+            LCD.WriteLine(' ');
+
+            // Draw text
+            LCD.Write("  Done  ");
+            LCD.Write(vals[N_PLACES] == 1 ? "- " : "+ ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write((char)(vals[i] + ASCII_NUM_START));
+                if(i % 3 == 0 && i != 0)
+                    LCD.Write(',');
+            }
+            LCD.WriteLine(' ');
+
+            // Draw bottom markers
+            LCD.Write(nIndex == N_PLACES + 1 ? "  ||||  " : "        ");
+            LCD.Write(nIndex == N_PLACES ? "| " : "  ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write(i == nIndex ? (editMode ? 'v' : '|') : ' ');
+                if(i % 3 == 0 && i != 0)
+                    LCD.Write(' ');
+            }
+            LCD.WriteLine(' ');
+
+            b = waitForPress(&BB);
+        } while(b != BUTTON_NONE);
+    }
+
+    int GetInt(const char * const pTitle, int old)
+    {
+        // Get a value
+        long long sum = GetLongLong(pTitle, old, true);
+
+        // Check that it is within bounds
+        if(sum > __INT32_MAX__)
+            return __INT32_MAX__;
+        else if(sum < - (__INT32_MAX__))
+            return -(__INT32_MAX__);
+        else
+            return (int)sum;    // Return the int
+    }
+
+    unsigned int GetIntU(const char * const pTitle, unsigned int old)
+    {
+        // Get a value
+        long long sum = GetLongLong(pTitle, old, false);
+
+        // Check that it is within bounds
+        if(sum > __UINT32_MAX__)
+            return __UINT32_MAX__;
+        else if(sum < 0)
+            return 0;
+        else
+            return (unsigned int)sum;   // Return unsigned int
+    }
+
 }
 
 } // namespace G8
