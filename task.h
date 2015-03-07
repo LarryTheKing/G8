@@ -57,6 +57,12 @@ namespace G8
         TASK_RESULT RunTask(char const * const pName, Robot * const pRobot) const;
 
         /**
+         * @brief   Selects a task from the menu
+         * @return  SelectTaskFromMenu = the index of the selected task
+         */
+        size_t SelectTaskFromMenu(void) const;
+
+        /**
          * @brief   Selects a Task from a menu and runs the TaskFunction using the robot
          * @param   pRobot    The Robot to run the task using
          * @return  RunTaskFromMenu = the return value from the Task

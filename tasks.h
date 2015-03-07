@@ -9,8 +9,6 @@ namespace G8
     {
         TASK_RESULT Main(Robot * const pRob);
 
-        TASK_RESULT Diagnostics(Robot * const pRob);
-
         TASK_RESULT PerfTest1(Robot * const pRob);
     }
 }

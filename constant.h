@@ -83,6 +83,27 @@ namespace G8
 
     public:
         /**
+         * @brief Returns the name of a constant at a specified index
+         * @param index The index to a constant
+         * @return Returns a const c-string
+         * @requires index < #this.length
+         */
+        char const * GetName(size_t const index) const
+        {
+            return pConstants[index].pName;
+        }
+
+        /**
+         * @brief Returns the C_TYPE of a constant at a specified index
+         * @param index The index to a constant
+         * @return Returns a C_TYPE
+         * @requires index < #this.length
+         */
+        C_TYPE GetType(size_t const index) const{
+            return pConstants[index].type;
+        }
+
+        /**
         * @brief Finds the index to a CONSTANT
         * @param pName The null terminated name of the CONSTANT
         * @param type  The C_TYPE of CONSTANT, C_TYPE_NONE if unknown
@@ -95,7 +116,7 @@ namespace G8
             {
                 // Check if the types and names match
                 if ((pConstants[i].type & type) == type // Type check always passes if type == C_TYPE_NONE
-                    && strcmp(pConstants[i].pName, pName) == 0)
+                        && strcmp(GetName(i), pName) == 0)
                 {
                     return i; // We found a match, return the index
                 }

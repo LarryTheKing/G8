@@ -1,5 +1,6 @@
 #include "global.h"
 #include "tasks.h"
+#include "diagnostic.h"
 
 namespace G8
 {

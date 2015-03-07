@@ -69,10 +69,14 @@ namespace G8
         RunTask(Find(pName), pRobot);
     }
 
+    size_t TaskSystem::SelectTaskFromMenu(void) const
+    {
+        return UI::MenuSelect(pTitle, ppNames, nTasks);
+    }
+
     TASK_RESULT TaskSystem::RunTaskFromMenu(Robot * const pRobot) const
     {
-        size_t index = UI::MenuSelect(pTitle, ppNames, nTasks);
-        return RunTask(index, pRobot);
+        return RunTask(SelectTaskFromMenu(), pRobot);
     }
 
     bool TaskSystem::AddTask(const char * const pName, TaskFunction pFunc)

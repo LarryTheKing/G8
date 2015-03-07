@@ -13,13 +13,6 @@ namespace Tasks
         return TASK_RESULT_SUCCESS;
     }
 
-    TASK_RESULT Diagnostics(Robot * const pRob)
-    {
-        LCD.WriteLine("No diagnostics here!\n-Larry");
-        Sleep(4000);
-        return TASK_RESULT_SUCCESS;
-    }
-
     TASK_RESULT PerfTest1(Robot * const pRob)
     {
         while(GetCdSIntensity(pRob->pCds_cell) > 0.2f);
