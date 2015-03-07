@@ -44,6 +44,15 @@ namespace G8 {
          * @return          Returns an 0 <= integer <= __UINT32_MAX
          */
         unsigned int GetIntU(char const * const pTitle = NULL, unsigned int old = 0);
+
+        /**
+         * @brief Prompts for float
+         * @param pTitle    The title to display at the top
+         * @param old       The old value to display on the screen
+         * @return          Returns a floating point value
+         */
+        float GetFloat(char const * const pTitle = NULL, float old = 0);
+
     }
 }
 

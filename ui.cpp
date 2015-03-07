@@ -132,6 +132,7 @@ namespace UI
         char vals[N_PLACES + 1] = {0};
 
         long long place = 1000000000;
+        vals[N_PLACES] = ( old < 0 ? 1 : 0);
         for(int i = N_PLACES - 1; i >= 0; i--)
         {
             vals[i] = old / place;
@@ -268,6 +269,175 @@ namespace UI
             return 0;
         else
             return (unsigned int)sum;   // Return unsigned int
+    }
+
+    float GetFloat(char const * const pTitle, float old)
+    {
+        ButtonBoard BB(static_cast<FEHIO::FEHIOPort>(CONST.GetVal<int>("BANK_BB", C_TYPE_INT)));
+
+        char vals[N_PLACES + 1] = {0};
+
+        if(old < 0){
+            vals[N_PLACES] = 1;
+            old = -old;
+        }
+        else
+            vals[N_PLACES] = 0;
+
+        int exponent = 0;
+        while(old > 999999.0f)
+        {
+            old /= 10.0f;
+            exponent++;
+        }
+
+        while(old < 99999.0f)
+        {
+            old *= 10;
+            exponent--;
+        }
+
+        long long place = 100000;
+        int iOld = old;
+        for(int i = N_PLACES - 1; i >= 4; i--)
+        {
+            vals[i] = iOld / place;
+            iOld %= place;
+            place /= 10;
+        }
+
+        if(exponent < 0){
+            vals[3] = 1;
+            exponent = -exponent;
+        }
+        else
+            vals[3] = 0;
+
+        place = 100;
+        for(int i = 2; i >= 0; i--)
+        {
+            vals[i] = exponent / place;
+            exponent %= place;
+            place /= 10;
+        }
+
+
+
+
+        int     nIndex = 4;
+        bool    editMode = false;
+
+        BUTTON b = BUTTON_NONE;
+
+        do {
+            if(!editMode)
+            {
+                if(b == BUTTON_LEFT)
+                    nIndex = (nIndex < N_PLACES + 1 ? nIndex + 1 : 0);
+                else if(b == BUTTON_RIGHT)
+                    nIndex = (nIndex == 0 ? N_PLACES + 1 : nIndex - 1);
+                else if(b == BUTTON_CENTER)
+                {
+                    if(nIndex == N_PLACES || nIndex == 3)
+                    {
+                        if(vals[nIndex] == 0)
+                            vals[nIndex] = 1;
+                        else
+                            vals[nIndex] = 0;
+                    }
+                    else if(nIndex != N_PLACES + 1)
+                        editMode = true;
+                    else
+                    {
+                        char * pString = new char[0xF];
+                        memset(pString, 0x00, 0xF);
+                        size_t si = 0;
+                        if(vals[N_PLACES])
+                            pString[si++] = '-';
+
+                        for(int i = N_PLACES - 1; i >= 0; i--)
+                        {
+                            pString[si++] = (vals[i] + ASCII_NUM_START);
+                            if(i == 4)
+                            {
+                                if(vals[3]){
+                                    pString[si++]='E';
+                                    pString[si++]='-';
+                                } else {
+                                    pString[si++]='E';
+                                }
+                                i--;
+                            }
+                        }
+
+                        float result = atof(pString);
+                        delete pString;
+                        return result;
+                    }
+                }
+            } else {
+                if(b == BUTTON_CENTER)
+                    editMode = false;
+                else if(nIndex < N_PLACES)
+                {
+                    if(b == BUTTON_LEFT)
+                        vals[nIndex] = (vals[nIndex] > 0 ? vals[nIndex] - 1 : 9);
+                    else if(b == BUTTON_RIGHT)
+                        vals[nIndex] = (vals[nIndex] < 9 ? vals[nIndex] + 1 : 0);
+                }
+            }
+
+            // Clear the screen and write the title
+            LCD.Clear();
+            if(pTitle){
+                LCD.WriteLine(pTitle); }
+
+            // Pad Y
+            for(int i = 0; i < PAD_Y; i++)
+                LCD.WriteLine(' ');
+
+            // Draw top markers
+            LCD.Write(nIndex == N_PLACES + 1 ? "  ||||  " : "        ");
+            LCD.Write(nIndex == N_PLACES ? "| " : "  ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write(i == nIndex ? (editMode ? '^' : '|') : ' ');
+                if(i == 4)
+                    LCD.Write("  ");
+            }
+            LCD.WriteLine(' ');
+
+            // Draw text
+            LCD.Write("  Done  ");
+            LCD.Write(vals[N_PLACES] == 1 ? "- " : "+ ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write((char)(vals[i] + ASCII_NUM_START));
+                if(i == 4)
+                {
+                    LCD.Write(" E");
+                    LCD.Write(vals[3] == 1 ? "-" : "+");
+                    i--;
+                }
+            }
+            LCD.WriteLine(' ');
+
+            // Draw bottom markers
+            LCD.Write(nIndex == N_PLACES + 1 ? "  ||||  " : "        ");
+            LCD.Write(nIndex == N_PLACES ? "| " : "  ");
+
+            for(int i = N_PLACES - 1; i >= 0; i--)
+            {
+                LCD.Write(i == nIndex ? (editMode ? 'v' : '|') : ' ');
+                if(i == 4)
+                    LCD.Write("  ");
+            }
+            LCD.WriteLine(' ');
+
+            b = waitForPress(&BB);
+        } while(b != BUTTON_NONE);
     }
 
 }
