@@ -66,27 +66,17 @@ namespace G8
 
     void Navigation::RotateTo(float heading)
     {
+        // Where are we now
         UpdatePosition();
-        float angle = CalcDegreesToRotate(currentPos.heading, heading);
-
-        LCD.Write("Current : ");
-        LCD.WriteLine(currentPos.heading);
-        LCD.Write("Desired : ");
-        LCD.WriteLine(heading);
-        LCD.Write("Offset : ");
-        LCD.WriteLine(angle);
-
+        // How much do we need to rotate
+        float angle = CalcDegreesToRotate(GetPosition().heading, heading);
+        // Rotate us this amount
         pSys->RotateCCW(angle);
 
+        // Where are we now
         UpdatePosition();
-        angle = CalcDegreesToRotate(currentPos.heading, heading);
-
-        LCD.Write("-Current : ");
-        LCD.WriteLine(currentPos.heading);
-        LCD.Write("-Desired : ");
-        LCD.WriteLine(heading);
-        LCD.Write("-Offset : ");
-        LCD.WriteLine(angle);
+        // How much more do we need to rotate
+        angle = CalcDegreesToRotate(GetPosition().heading, heading);
 
         // What are our tolerances
         const float ROT_TOL = CONST.GetVal<float>("ROT_TOL", C_TYPE_FLOAT);
@@ -97,14 +87,49 @@ namespace G8
 
         while((angle >  ROT_TOL  || angle < -ROT_TOL) && (nCorrections-- > 0))
         {
-            UpdatePosition();
-            angle = CalcDegreesToRotate(currentPos.heading, heading);
-
-            LCD.Write("-Correction : ");
-            LCD.WriteLine(angle);
-
+            // Rotate us towards the correct angle
             pSys->RotateCCW(angle, COR_POWER);
+
+            // Where are we now
+            UpdatePosition();
+            // How much more do we need to rotate
+            angle = CalcDegreesToRotate(GetPosition().heading, heading);
         }
+    }
+
+    void Navigation::FaceTowards(Point const point)
+    {
+        UpdatePosition();
+        float x = point.x - GetPosition().x;
+        float y = point.y - GetPosition().y;
+
+        if(x == 0.0f && y == 0.0f)
+            return;
+
+        float desiredHeading = (y > 0 ? 90.0f : 270.0f);
+        if(x != 0.0f)
+        {
+            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) : atanf(y / x) + 180.0f));
+        }
+
+        RotateTo(desiredHeading);
+    }
+
+    void Navigation::FaceAway(Point const point)
+    {
+        float x = GetPosition().x - point.x;
+        float y = GetPosition().y - point.y;
+
+        if(x == 0.0f && y == 0.0f)
+            return;
+
+        float desiredHeading = (y > 0 ? 90.0f : 270.0f);
+        if(x != 0.0f)
+        {
+            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) : atanf(y / x) + 180.0f));
+        }
+
+        RotateTo(desiredHeading);
     }
 
     float distSquared(Position const a, Position const b)
@@ -157,7 +182,23 @@ namespace G8
 
     void Navigation::DriveBackward(float inches, float percentPower)
     {
-        DriveForward(inches, percentPower);
+        DriveForward(-inches, percentPower);
     }
+
+    void Navigation::DriveForwardTo(const Point point, const float percentPower)
+    {
+        // Face towards the poit
+        FaceTowards(point);
+
+        // How far do we have to drive
+        UpdatePosition();
+        float x = point.x - GetPosition().x;
+        float y = point.y - GetPosition().y;
+        float dist = sqrtf(x * x + y * y);
+
+        // Drive forward this distance
+        DriveForward(dist, percentPower);
+    }
+
 }
 

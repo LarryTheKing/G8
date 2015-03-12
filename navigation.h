@@ -11,11 +11,24 @@
 
 namespace G8
 {
+
+    struct Point
+    {
+        float x;
+        float y;
+    };
+
     struct Position
     {
         float heading;
-        float x;
-        float y;
+        union
+        {
+            Point point;
+            struct{
+                float x;
+                float y;
+            };
+        };
     };
 
     class Navigation
@@ -79,6 +92,10 @@ namespace G8
          */
         void RotateTo(float heading);
 
+        void FaceTowards(Point const point);
+
+        void FaceAway(Point const point);
+
         /**
          * @brief Drives the robot forward a specified distance
          * @param inches        The distance to travel
@@ -93,6 +110,8 @@ namespace G8
          */
         void DriveBackward(float inches, float percentPower);
 
+
+        void DriveForwardTo(Point const point, float const percentPower);
 
     };
 }
