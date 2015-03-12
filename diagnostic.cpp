@@ -4,6 +4,7 @@
 #include "robot.h"
 
 #include <FEHBuzzer.h>
+#include <FEHServo.h>
 #include <new>
 
 namespace G8 {
@@ -77,12 +78,55 @@ TASK_RESULT RebuildRobot(Robot * const pRob)
     return TASK_RESULT_FAIL;
 }
 
+TASK_RESULT CalibrateServo(Robot * const pRob)
+{
+    unsigned int nServo = UI::GetIntU("Servo Port", 0);
+
+    FEHServo servo(static_cast<FEHServo::FEHServoPort>(nServo));
+    servo.Calibrate();
+    LCD.WriteLine("-Middle to quit-");
+    while (pRob->pButtons->MiddlePressed());
+    Sleep(100);
+    while (!pRob->pButtons->MiddlePressed());
+    return TASK_RESULT_SUCCESS;
+}
+
+TASK_RESULT PrintPosition(Robot * const pRob)
+{
+    LCD.WriteLine("Point in -Y dir.");
+    LCD.WriteLine("-Middle to start-");
+    while(!pRob->pButtons->MiddlePressed());
+    Sleep(100);
+    while(pRob->pButtons->MiddlePressed());
+
+    pRob->pNav->CalibrateHeading(270);
+
+    while(!pRob->pButtons->MiddlePressed())
+    {
+        Position p = pRob->pNav->UpdatePosition();
+
+        LCD.Clear();
+        LCD.Write("X: ");
+        LCD.WriteLine(p.x);
+        LCD.Write("Y: ");
+        LCD.WriteLine(p.y);
+        LCD.Write("H: ");
+        LCD.WriteLine(p.heading);
+
+        Sleep(100);
+    }
+
+    return TASK_RESULT_SUCCESS;
+}
+
 TASK_RESULT Diagnostics(Robot * const pRob)
 {
     TaskSystem sys("Choose a diagnostic");
     sys.AddTask("Quit", Quit);
     sys.AddTask("Redefine constants", RedfineConstants);
     sys.AddTask("Rebuild Robot", RebuildRobot);
+    sys.AddTask("Calibrate Servo", CalibrateServo);
+    sys.AddTask("Print Position", PrintPosition);
 
     while(true)
     {
