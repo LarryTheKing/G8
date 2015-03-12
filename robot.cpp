@@ -16,7 +16,11 @@ namespace G8
 
         pMob = new Mobility(pRight_encoder, pLeft_encoder, pRight_motor, pLeft_motor);
 
-        RPS.InitializeMenu();
+        pBag_servo = new FEHServo(static_cast<FEHServo::FEHServoPort>(CONST.GetVal<int>("SERVO_BAG_PORT", C_TYPE_INT)));
+        pBag_servo->SetMax(CONST.GetVal<int>("SERVO_BAG_MAX", C_TYPE_INT));
+        pBag_servo->SetMin(CONST.GetVal<int>("SERVO_BAG_MIN", C_TYPE_INT));
+
+        // RPS.InitializeMenu();
 
         pNav = new Navigation(pMob);
     }
@@ -40,6 +44,9 @@ namespace G8
 
         delete pCds_cell;
         pCds_cell = nullptr;
+
+        delete pBag_servo;
+        pBag_servo = nullptr;
 
         delete pMob;
         pMob = nullptr;

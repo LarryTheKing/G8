@@ -1,6 +1,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include <FEHServo.h>
 #include "mobility.h"
 #include "navigation.h"
 
@@ -20,6 +21,8 @@ namespace G8
 
         FEHMotor * pRight_motor;
         FEHMotor * pLeft_motor;
+
+        FEHServo * pBag_servo;
 
         AnalogInputPin * pCds_cell;
 
