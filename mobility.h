@@ -28,18 +28,18 @@ namespace G8
 
     public:
         /**
-        * @brief Moves the robot forwards
-        * @param Distance The distance the robot must travel
-        * @param Power The motor power
+        * @brief DriveForward   Moves the robot forwards
+        * @param inches         The distance the robot must travel
+        * @param percentPower   The motor power
         *
         * @requires 0 < percentPower <= 100
         */
         void DriveForward(float inches, float percentPower);
 
         /**
-        * @brief Moves the robot backwards
-        * @param inches     The distance the robot must travel
-        * @param percent    Power The motor power
+        * @brief DriveBackward  Moves the robot backwards
+        * @param inches         The distance the robot must travel
+        * @param percentPower   The motor power
         *
         * @requires 0 < percentPower <= 100
         */
@@ -85,6 +85,20 @@ namespace G8
          */
         void StrafeCW(float deg, float percentPower);
         void StrafeCW(float deg);
+
+        /**
+         * @brief SpinCCW       Spins the robot counter clockwise for some time
+         * @param ms            The time to spin in milliseconds
+         * @param percentPower  The power to spin at
+         */
+        void SpinCCW(unsigned int ms, float percentPower);
+
+        /**
+         * @brief SpinCCW       Spins the robot clockwise for some time
+         * @param ms            The time to spin in milliseconds
+         * @param percentPower  The power to spin at
+         */
+        void SpinCW(unsigned int ms, float percentPower);
     };
 }
 

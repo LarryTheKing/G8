@@ -118,4 +118,24 @@ namespace G8
     void Mobility::StrafeCW(float deg){
         StrafeCCW(-deg, CONST.GetVal<float>("ROT_POWER", C_TYPE_FLOAT));}
 
+    void Mobility::SpinCCW(unsigned int ms, float percentPower)
+    {
+        //Set both motors to desired percent
+        pMotorR->SetPercent( percentPower * CONST.GetVal<float>("MOD_RIGHT", C_TYPE_FLOAT));
+        pMotorL->SetPercent(-percentPower * CONST.GetVal<float>("MOD_LEFT", C_TYPE_FLOAT));
+
+        // When should we stop the motors
+        const unsigned long endTime = TimeNowMSec() + ms;
+
+        // Wait until it is time to stop
+        while(TimeNowMSec() < endTime);
+
+        //Turn off motors
+        pMotorR->Stop();
+        pMotorL->Stop();
+    }
+
+    void Mobility::SpinCW(unsigned int ms, float percentPower) {
+        SpinCCW(ms, -percentPower); }
+
 }
