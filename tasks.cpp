@@ -29,6 +29,14 @@ namespace Tasks
 
         return TASK_RESULT_SUCCESS;
     }
+
+    TASK_RESULT PerfTest3(Robot * const pRob)
+    {
+        // Wait for CdS cell
+        while(GetCdSIntensity(pRob->pCds_cell) > 0.2f);
+
+
+    }
 }
 
 
