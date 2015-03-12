@@ -132,7 +132,13 @@ namespace UI
         char vals[N_PLACES + 1] = {0};
 
         long long place = 1000000000;
-        vals[N_PLACES] = ( old < 0 ? 1 : 0);
+
+        if(old < 0){
+            vals[N_PLACES] = 1;
+            old = -old; }
+        else
+            vals[N_PLACES] = 0;
+
         for(int i = N_PLACES - 1; i >= 0; i--)
         {
             vals[i] = old / place;
@@ -279,8 +285,7 @@ namespace UI
 
         if(old < 0){
             vals[N_PLACES] = 1;
-            old = -old;
-        }
+            old = -old; }
         else
             vals[N_PLACES] = 0;
 
