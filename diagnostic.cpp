@@ -50,6 +50,9 @@ TASK_RESULT RedfineConstants(Robot * const pRob)
             case C_TYPE_INT | C_TYPE_UNSIGNED:
                 CONST.Redefine<unsigned int>(index, UI::GetIntU(CONST.GetName(index), CONST.GetVal<unsigned int>(index)));
                 break;
+            case C_TYPE_FLOAT:
+                CONST.Redefine<float>(index, UI::GetFloat(CONST.GetName(index), CONST.GetVal<float>(index)));
+                break;
             default:
                 buzz.Beep();
                 break;
