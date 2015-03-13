@@ -113,6 +113,8 @@ namespace G8
 
         void DriveForwardTo(Point const point, float const percentPower);
 
+        void DriveBackwardTo(Point const point, float const percentPower);
+
     };
 }
 

@@ -20,8 +20,6 @@ namespace G8
         pBag_servo->SetMax(CONST.GetVal<int>("SERVO_BAG_MAX", C_TYPE_INT));
         pBag_servo->SetMin(CONST.GetVal<int>("SERVO_BAG_MIN", C_TYPE_INT));
 
-        // RPS.InitializeMenu();
-
         pNav = new Navigation(pMob);
     }
 

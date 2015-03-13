@@ -83,20 +83,23 @@ namespace G8
         const float COR_POWER = CONST.GetVal<float>("COR_POWER", C_TYPE_FLOAT);
 
         // How many times to try and correct
-        int nCorrections = CONST.GetVal<int>("MAX_COR", C_TYPE_INT);
+        int nCorrections = CONST.GetVal<int>("MAX_ROT_COR", C_TYPE_INT);
 
-        while((angle >  ROT_TOL  || angle < -ROT_TOL) && (nCorrections-- > 0))
+        const int   COR_TIME_MS = CONST.GetVal<int>("COR_TIME_MS", C_TYPE_INT);
+
+        while((angle >  ROT_TOL  || angle < -ROT_TOL) && ((nCorrections--) > 0))
         {
             // Rotate us towards the correct angle
-            pSys->RotateCCW(angle, COR_POWER);
+            pSys->SpinCCW(angle > 0 ? COR_TIME_MS : -COR_TIME_MS, COR_POWER);
 
-            // Where are we now
-            UpdatePosition();
+            Sleep(80);
+
             // How much more do we need to rotate
-            angle = CalcDegreesToRotate(GetPosition().heading, heading);
+            angle = CalcDegreesToRotate(UpdatePosition().heading, heading);
         }
     }
 
+    #define DEG_RAD (360.0f / (2.0f * 3.14159f))
     void Navigation::FaceTowards(Point const point)
     {
         UpdatePosition();
@@ -109,7 +112,7 @@ namespace G8
         float desiredHeading = (y > 0 ? 90.0f : 270.0f);
         if(x != 0.0f)
         {
-            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) : atanf(y / x) + 180.0f));
+            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) * DEG_RAD : atanf(y / x) * DEG_RAD + 180.0f));
         }
 
         RotateTo(desiredHeading);
@@ -126,7 +129,7 @@ namespace G8
         float desiredHeading = (y > 0 ? 90.0f : 270.0f);
         if(x != 0.0f)
         {
-            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) : atanf(y / x) + 180.0f));
+            desiredHeading = WrapAngle((x > 0.0f ? atanf(y / x) * DEG_RAD : atanf(y / x) * DEG_RAD + 180.0f));
         }
 
         RotateTo(desiredHeading);
@@ -143,41 +146,41 @@ namespace G8
         return x + y;
     }
 
+    float dist(Position const a, Position const b)
+    {
+        return sqrtf(distSquared(a, b));
+    }
+
     void Navigation::DriveForward(float inches, float percentPower)
     {
+        LCD.Write("Drive forward(in) ");
+        LCD.WriteLine(inches);
         Position start = UpdatePosition();
         pSys->DriveForward(inches, percentPower);
 
         // How far off are we
-        float inchesSq = inches * inches;
-        float disp = inchesSq - distSquared(start, UpdatePosition());
+        float disp = (inches > 0 ? inches : - inches) - dist(start, UpdatePosition());
 
         // What are our tolerances
-        float MOV_TOL_SQ = CONST.GetVal<float>("MOV_TOL", C_TYPE_FLOAT);
-        MOV_TOL_SQ *= MOV_TOL_SQ;
+        float MOV_TOL= CONST.GetVal<float>("MOV_TOL", C_TYPE_FLOAT);
         const float COR_POWER = CONST.GetVal<float>("COR_POWER", C_TYPE_FLOAT);
 
         // How many times to try and correct
-        int nCorrections = CONST.GetVal<int>("MAX_COR", C_TYPE_INT);
+        int nCorrections = CONST.GetVal<int>("MAX_MOV_COR", C_TYPE_INT);
 
-        while((disp > MOV_TOL_SQ || disp < -MOV_TOL_SQ) && (nCorrections-- > 0))
+        while((disp > MOV_TOL || disp < -MOV_TOL) && (nCorrections-- > 0))
         {
             if(inches > 0.0f) { // Was this really a forward movement
-                if(disp > 0.0f)
-                    pSys->DriveForward(sqrtf(disp), COR_POWER);  // Not there yet, keep moving forwards
-                else
-                    pSys->DriveBackward(sqrtf(-disp), COR_POWER);// Overshot, move backward
+                    pSys->DriveForward(disp, COR_POWER);  // Not there yet, keep moving forwards
             } else {            // Was this a backward movement in disguise?!
-                if(disp > 0.0f)
-                    pSys->DriveBackward(sqrtf(disp), COR_POWER); // Not there yet, keep moving backwards
-                else
-                    pSys->DriveForward(sqrtf(-disp), COR_POWER); // Overshot, move forward
+                    pSys->DriveBackward(disp, COR_POWER); // Not there yet, keep moving backwards
             }
 
             // What is our new displacement?
-            disp = inchesSq - distSquared(start, UpdatePosition());
+            disp = (inches > 0 ? inches : - inches) - dist(start, UpdatePosition());
         }
 
+        LCD.WriteLine("DONE");
     }
 
     void Navigation::DriveBackward(float inches, float percentPower)
@@ -200,5 +203,19 @@ namespace G8
         DriveForward(dist, percentPower);
     }
 
+    void Navigation::DriveBackwardTo(const Point point, const float percentPower)
+    {
+        // Face towards the poit
+        FaceAway(point);
+
+        // How far do we have to drive
+        UpdatePosition();
+        float x = point.x - GetPosition().x;
+        float y = point.y - GetPosition().y;
+        float dist = sqrtf(x * x + y * y);
+
+        // Drive forward this distance
+        DriveBackward(dist, percentPower);
+    }
 }
 

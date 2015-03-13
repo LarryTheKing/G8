@@ -36,12 +36,14 @@ namespace G8
 
         CONST.Add<float>("COR_POWER",   65.0f, C_TYPE_FLOAT);
         CONST.Add<float>("ROT_POWER",   80.0f, C_TYPE_FLOAT);
+        CONST.Add<int>  ("COR_TIME_MS", 100, C_TYPE_INT | C_TYPE_UNSIGNED);
 
         // Navigation constantsm
         CONST.Add<int>  ("RPS_SAMPLES", 2, C_TYPE_INT | C_TYPE_UNSIGNED);
-        CONST.Add<int>  ("MAX_COR",     6, C_TYPE_INT | C_TYPE_UNSIGNED); // The max number tries to correct
+        CONST.Add<int>  ("MAX_MOV_COR", 6, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct rotation
+        CONST.Add<int>  ("MAX_ROT_COR", 20, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct movement
         CONST.Add<float>("MOV_TOL",     0.5f, C_TYPE_FLOAT);    // Movement tolerance
-        CONST.Add<float>("ROT_TOL",     1.5f, C_TYPE_FLOAT);    // Rotation tolerance
+        CONST.Add<float>("ROT_TOL",     1.2f, C_TYPE_FLOAT);    // Rotation tolerance
     }
 
     void DefineTasks(void)
