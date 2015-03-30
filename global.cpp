@@ -18,15 +18,19 @@ namespace G8
         CONST.Add<int>  ("MOT_LEFT",    1, C_TYPE_INT | C_TYPE_UNSIGNED); // Left Motor FEHMotor::Motor1
         CONST.Add<int>  ("PIN_CDS",     8, C_TYPE_INT | C_TYPE_UNSIGNED); // CdS Cell FEHIO::P1_0
         CONST.Add<int>  ("SERVO_BAG_PORT", 0, C_TYPE_INT | C_TYPE_UNSIGNED);
+        CONST.Add<int>  ("SERVO_CRANK_PORT", 1, C_TYPE_INT | C_TYPE_UNSIGNED);
 
         // Devices constants
         CONST.Add<int>  ("CDS_SAMPLES", 3, C_TYPE_INT | C_TYPE_UNSIGNED);
         CONST.Add<float>("MAX_VOLT",    3.3f, C_TYPE_FLOAT);
         CONST.Add<int>  ("SERVO_BAG_MAX", 2352, C_TYPE_INT);
         CONST.Add<int>  ("SERVO_BAG_MIN", 500, C_TYPE_INT);
+        CONST.Add<int>  ("SERVO_CRANK_MAX", 2500, C_TYPE_INT);
+        CONST.Add<int>  ("SERVO_CRANK_MIN", 500, C_TYPE_INT);
 
-        CONST.Add<float>("LIGHT_RED_MAX",   0.300f, C_TYPE_FLOAT);
-        CONST.Add<float>("LIGHT_BLUE_MAX",  0.650f, C_TYPE_FLOAT);
+        CONST.Add<float>("LIGHT_RED_MAX",   0.130f, C_TYPE_FLOAT);
+        CONST.Add<float>("LIGHT_BLUE_MAX",  0.400f, C_TYPE_FLOAT);
+        CONST.Add<float>("LIGHT_START_MAX", 0.500f, C_TYPE_FLOAT);
 
         // Mobility constants
         CONST.Add<float>("TICK_INCH",   2.778f, C_TYPE_FLOAT);
@@ -52,5 +56,9 @@ namespace G8
         TASK.AddTask("Diagnostics",     Tasks::Diagnostics);
         TASK.AddTask("Perf Test 1",     Tasks::PerfTest1);
         TASK.AddTask("Perf Test 3",     Tasks::PerfTest3);
+        TASK.AddTask("Perf Test 4",     Tasks::PerfTest4);
+        TASK.AddTask("Perf Test 4.1",   Tasks::PerfTest4_1);
+        TASK.AddTask("Perf Test 4.2",   Tasks::PerfTest4_2);
+        TASK.AddTask("Dance",           Tasks::Dance);
     }
 }

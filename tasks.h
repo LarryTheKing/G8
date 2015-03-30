@@ -12,6 +12,16 @@ namespace G8
         TASK_RESULT PerfTest1(Robot * const pRob);
 
         TASK_RESULT PerfTest3(Robot * const pRob);
+
+        TASK_RESULT PerfTest4(Robot * const pRob);
+
+        TASK_RESULT PerfTest4(Robot * const pRob);
+
+        TASK_RESULT PerfTest4_1(Robot * const pRob);
+
+        TASK_RESULT PerfTest4_2(Robot * const pRob);
+
+        TASK_RESULT Dance(Robot * const pRob);
     }
 }
 

@@ -2,6 +2,7 @@
 #include "ui.h"
 #include "global.h"
 #include "robot.h"
+#include "devices.h"
 
 #include <FEHBuzzer.h>
 #include <FEHServo.h>
@@ -94,13 +95,46 @@ TASK_RESULT CalibrateServo(Robot * const pRob)
     return TASK_RESULT_SUCCESS;
 }
 
+TASK_RESULT PrintCdS(Robot * const pRob)
+{
+    unsigned int nCdS = UI::GetIntU("CdS Cell Port", 0);
+
+    AnalogInputPin pin(static_cast<FEHIO::FEHIOPin>(nCdS));
+
+    while (!pRob->pButtons->LeftPressed())
+    {
+        LCD.Clear();
+        LCD.Write("Value: ");
+        LCD.WriteLine(GetCdSIntensity(&pin));
+        LCD.Write("Color: ");
+        switch(ReadCdS(pRob->pCds_cell))
+        {
+            case LIGHT_RED:
+                LCD.WriteLine("RED");
+                break;
+            case LIGHT_BLUE:
+                LCD.WriteLine("BLUE");
+                break;
+            default:
+                LCD.WriteLine("UNKNOWN");
+                break;
+        }
+
+        Sleep(100);
+    }
+
+    return TASK_RESULT_SUCCESS;
+}
+
 TASK_RESULT PrintPosition(Robot * const pRob)
 {
+    RPS.InitializeMenu();
     LCD.WriteLine("Point in -Y dir.");
     LCD.WriteLine("-Middle to start-");
     while(!pRob->pButtons->MiddlePressed());
     Sleep(100);
     while(pRob->pButtons->MiddlePressed());
+    Sleep(100);
 
     pRob->pNav->CalibrateHeading(270);
 
@@ -122,6 +156,38 @@ TASK_RESULT PrintPosition(Robot * const pRob)
     return TASK_RESULT_SUCCESS;
 }
 
+TASK_RESULT TestSolenoid(Robot * const pRob)
+{
+    LCD.WriteLine("Plug solenoid into bank 2");
+    LCD.WriteLine("-Middle to start-");
+    LCD.WriteLine("-All to quit-");
+    while(!pRob->pButtons->MiddlePressed());
+    Sleep(100);
+    while(pRob->pButtons->MiddlePressed());
+    Sleep(100);
+    while(!pRob->pButtons->MiddlePressed());
+    Sleep(100);
+    LCD.WriteLine("Running...");
+
+    DigitalOutputPin pin0(FEHIO::P2_0);
+    DigitalOutputPin pin1(FEHIO::P2_1);
+    DigitalOutputPin pin2(FEHIO::P2_2);
+
+    while(!(pRob->pButtons->LeftPressed() && pRob->pButtons->MiddlePressed() && pRob->pButtons->RightPressed()))
+    {
+        pin0.Write(pRob->pButtons->LeftPressed());
+        pin1.Write(pRob->pButtons->MiddlePressed());
+        pin2.Write(pRob->pButtons->RightPressed());
+        Sleep(100);
+    }
+
+    pin0.Write(false);
+    pin1.Write(false);
+    pin2.Write(false);
+
+    return TASK_RESULT_SUCCESS;
+}
+
 TASK_RESULT Diagnostics(Robot * const pRob)
 {
     TaskSystem sys("Choose a diagnostic");
@@ -129,7 +195,9 @@ TASK_RESULT Diagnostics(Robot * const pRob)
     sys.AddTask("Redefine constants", RedfineConstants);
     sys.AddTask("Rebuild Robot", RebuildRobot);
     sys.AddTask("Calibrate Servo", CalibrateServo);
-    sys.AddTask("Print Position", PrintPosition);
+    sys.AddTask("Print CdS value", PrintCdS);
+    sys.AddTask("Print position", PrintPosition);
+    sys.AddTask("Test Solenoid", TestSolenoid);
 
     while(true)
     {

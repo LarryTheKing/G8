@@ -22,9 +22,10 @@ namespace G8
     float GetCdSIntensity(AnalogInputPin * const pPin);
 
     enum LIGHT {
-        LIGHT_NONE  = 0x00,
-        LIGHT_RED   = 0x01,
-        LIGHT_BLUE  = 0x02
+        LIGHT_NONE   = 0x00,
+        LIGHT_RED    = 0x01,
+        LIGHT_BLUE   = 0x02,
+        LIGHT_BRIGHT = 0xFF
     };
 
     /**

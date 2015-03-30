@@ -23,6 +23,7 @@ namespace G8
         FEHMotor * pLeft_motor;
 
         FEHServo * pBag_servo;
+        FEHServo * pCrank_servo;
 
         AnalogInputPin * pCds_cell;
 
