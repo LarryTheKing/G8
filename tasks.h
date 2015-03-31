@@ -16,6 +16,7 @@ namespace G8
         TASK_RESULT DriveToCrank(Robot * const pRob);
 
         TASK_RESULT TurnCrank(Robot * const pRob);
+
     }
 }
 

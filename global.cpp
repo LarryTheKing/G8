@@ -48,20 +48,32 @@ namespace G8
         CONST.Add<int>  ("MAX_ROT_COR", 20, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct movement
         CONST.Add<float>("MOV_TOL",     0.5f, C_TYPE_FLOAT);    // Movement tolerance
         CONST.Add<float>("ROT_TOL",     1.2f, C_TYPE_FLOAT);    // Rotation tolerance
+<<<<<<< HEAD
 
         // Task constants
         CONST.Add<int>  ("TIME_OUT_START", 30, C_TYPE_INT | C_TYPE_UNSIGNED); // Time to start after not seeing start light
         CONST.Add<int>  ("TIME_OUT_CRANK", 5, C_TYPE_INT | C_TYPE_UNSIGNED); // Time to wait for crank light
+=======
+>>>>>>> 0c35bfe44d20ce577dbee7adfaf381f4a9ddb303
     }
 
     void DefineTasks(void)
     {
         TASK.AddTask("Main",            Tasks::Main);
         TASK.AddTask("Diagnostics",     Tasks::Diagnostics);
+<<<<<<< HEAD
 
         TASK.AddTask("Drive to Salt Bag",   Tasks::DriveToSaltBag);
         TASK.AddTask("Capture Salt Bag",    Tasks::CaptureSaltBag);
         TASK.AddTask("Drive to Crank",      Tasks::DriveToCrank);
         TASK.AddTask("Turn Crank",          Tasks::TurnCrank);
+=======
+        TASK.AddTask("Perf Test 1",     Tasks::PerfTest1);
+        TASK.AddTask("Perf Test 3",     Tasks::PerfTest3);
+        TASK.AddTask("Perf Test 4",     Tasks::PerfTest4);
+        TASK.AddTask("Perf Test 4.1",   Tasks::PerfTest4_1);
+        TASK.AddTask("Perf Test 4.2",   Tasks::PerfTest4_2);
+        TASK.AddTask("Dance",           Tasks::Dance);
+>>>>>>> 0c35bfe44d20ce577dbee7adfaf381f4a9ddb303
     }
 }
