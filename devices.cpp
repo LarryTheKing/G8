@@ -10,7 +10,8 @@ namespace G8
             cVal += pPin->Value();  // Add to weighted average
             Sleep(20);              // Wait at least 20 ms between samples
         }
-        cVal /= CDS_SAMPLES;                        // Compute true average
+        if(CDS_SAMPLES)
+            cVal /= CDS_SAMPLES;                        // Compute true average
         // Return average intensity;
         return Clamp(cVal / CONST.GetVal<float>("MAX_VOLT", C_TYPE_FLOAT), 0.0f, 1.0f);
     }
@@ -18,9 +19,9 @@ namespace G8
     LIGHT ReadCdS(AnalogInputPin * const pPin)
     {
        float IntensityCdS = GetCdSIntensity(pPin);
-       if(IntensityCdS < CONST.GetVal<int>("LIGHT_RED_MAX", C_TYPE_FLOAT))
+       if(IntensityCdS < CONST.GetVal<float>("LIGHT_RED_MAX", C_TYPE_FLOAT))
           return LIGHT_RED;
-       else if(IntensityCdS < CONST.GetVal<int>("LIGHT_BLUE_MAX", C_TYPE_FLOAT))
+       else if(IntensityCdS < CONST.GetVal<float>("LIGHT_BLUE_MAX", C_TYPE_FLOAT))
           return LIGHT_BLUE;
 
        return LIGHT_NONE;

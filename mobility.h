@@ -91,14 +91,14 @@ namespace G8
          * @param ms            The time to spin in milliseconds
          * @param percentPower  The power to spin at
          */
-        void SpinCCW(unsigned int ms, float percentPower);
+        void SpinCCW(int ms, float percentPower);
 
         /**
          * @brief SpinCCW       Spins the robot clockwise for some time
          * @param ms            The time to spin in milliseconds
          * @param percentPower  The power to spin at
          */
-        void SpinCW(unsigned int ms, float percentPower);
+        void SpinCW(int ms, float percentPower);
     };
 }
 

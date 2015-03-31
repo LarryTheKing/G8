@@ -9,9 +9,13 @@ namespace G8
     {
         TASK_RESULT Main(Robot * const pRob);
 
-        TASK_RESULT PerfTest1(Robot * const pRob);
+        TASK_RESULT DriveToSaltBag(Robot * const pRob);
 
-        TASK_RESULT PerfTest3(Robot * const pRob);
+        TASK_RESULT CaptureSaltBag(Robot * const pRob);
+
+        TASK_RESULT DriveToCrank(Robot * const pRob);
+
+        TASK_RESULT TurnCrank(Robot * const pRob);
     }
 }
 

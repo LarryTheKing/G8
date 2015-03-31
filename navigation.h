@@ -80,7 +80,7 @@ namespace G8
         // Returns a pointer to the mobility system
         Mobility * const GetMobility(void) { return pSys; }
 
-        // Returns teh current position
+        // Returns the current position
         Position GetPosition(void) const { return currentPos; }
 
     public:
@@ -112,6 +112,8 @@ namespace G8
 
 
         void DriveForwardTo(Point const point, float const percentPower);
+
+        void DriveBackwardTo(Point const point, float const percentPower);
 
     };
 }

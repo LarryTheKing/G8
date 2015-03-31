@@ -20,7 +20,9 @@ namespace G8
         pBag_servo->SetMax(CONST.GetVal<int>("SERVO_BAG_MAX", C_TYPE_INT));
         pBag_servo->SetMin(CONST.GetVal<int>("SERVO_BAG_MIN", C_TYPE_INT));
 
-        // RPS.InitializeMenu();
+        pCrank_servo = new FEHServo(static_cast<FEHServo::FEHServoPort>(CONST.GetVal<int>("SERVO_CRANK_PORT", C_TYPE_INT)));
+        pCrank_servo->SetMax(CONST.GetVal<int>("SERVO_CRANK_MAX", C_TYPE_INT));
+        pCrank_servo->SetMin(CONST.GetVal<int>("SERVO_CRANK_MIN", C_TYPE_INT));
 
         pNav = new Navigation(pMob);
     }
@@ -47,6 +49,9 @@ namespace G8
 
         delete pBag_servo;
         pBag_servo = nullptr;
+
+        delete pCrank_servo;
+        pCrank_servo = nullptr;
 
         delete pMob;
         pMob = nullptr;
