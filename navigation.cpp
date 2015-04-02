@@ -70,8 +70,10 @@ namespace G8
         UpdatePosition();
         // How much do we need to rotate
         float angle = CalcDegreesToRotate(GetPosition().heading, heading);
-        // Rotate us this amount
-        pSys->RotateCCW(angle);
+
+        // Rotate us this amount?
+        if(angle > 4.0f || angle < -4.0f)
+            pSys->RotateCCW(angle);
 
         // Where are we now
         UpdatePosition();

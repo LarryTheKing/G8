@@ -129,19 +129,21 @@ TASK_RESULT PrintCdS(Robot * const pRob)
 TASK_RESULT PrintPosition(Robot * const pRob)
 {
     RPS.InitializeMenu();
-    LCD.WriteLine("Point in -Y dir.");
+    LCD.WriteLine("Place in start position.");
     LCD.WriteLine("-Middle to start-");
     while(!pRob->pButtons->MiddlePressed());
     Sleep(100);
     while(pRob->pButtons->MiddlePressed());
     Sleep(100);
 
-    pRob->pNav->CalibrateHeading(270);
+    // Calibrate RPS
+    pRob->pNav->CalibrateHeading(270.0f);
+    pRob->pNav->CalibrateX(18.0f);
+    pRob->pNav->CalibrateY(30.5f);
 
     while(!pRob->pButtons->MiddlePressed())
     {
         Position p = pRob->pNav->UpdatePosition();
-
         LCD.Clear();
         LCD.Write("X: ");
         LCD.WriteLine(p.x);

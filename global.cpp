@@ -30,7 +30,7 @@ namespace G8
 
         CONST.Add<float>("LIGHT_RED_MAX",   0.130f, C_TYPE_FLOAT);
         CONST.Add<float>("LIGHT_BLUE_MAX",  0.400f, C_TYPE_FLOAT);
-        CONST.Add<float>("LIGHT_START_MAX", 0.500f, C_TYPE_FLOAT);
+        CONST.Add<float>("LIGHT_START_MAX", 0.610f, C_TYPE_FLOAT);
 
         // Mobility constants
         CONST.Add<float>("TICK_INCH",   2.778f, C_TYPE_FLOAT);
@@ -52,6 +52,10 @@ namespace G8
         // Task constants
         CONST.Add<int>  ("TIME_OUT_START", 30, C_TYPE_INT | C_TYPE_UNSIGNED); // Time to start after not seeing start light
         CONST.Add<int>  ("TIME_OUT_CRANK", 5, C_TYPE_INT | C_TYPE_UNSIGNED); // Time to wait for crank light
+
+        CONST.Add<int>  ("PIN_BUTTON_R",    16, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for red button FEHIO::P2_0
+        CONST.Add<int>  ("PIN_BUTTON_W",    17, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for white button FEHIO::P2_1
+        CONST.Add<int>  ("PIN_BUTTON_B",    18, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for blue button FEHIO::P2_2
     }
 
     void DefineTasks(void)
@@ -63,5 +67,10 @@ namespace G8
         TASK.AddTask("Capture Salt Bag",    Tasks::CaptureSaltBag);
         TASK.AddTask("Drive to Crank",      Tasks::DriveToCrank);
         TASK.AddTask("Turn Crank",          Tasks::TurnCrank);
+        TASK.AddTask("Drive To Buttons",    Tasks::DriveToButtons);
+        TASK.AddTask("Drive To Cubby",      Tasks::DriveToCubby);
+        TASK.AddTask("Deposit Salt Bag",    Tasks::DepositSaltBag);
+        TASK.AddTask("Drive To Toggle",     Tasks::DriveToToggle);
+        TASK.AddTask("Press Toggle",        Tasks::PressToggle);
     }
 }

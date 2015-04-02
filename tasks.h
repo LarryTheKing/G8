@@ -17,6 +17,17 @@ namespace G8
 
         TASK_RESULT TurnCrank(Robot * const pRob);
 
+        TASK_RESULT DriveToButtons(Robot * const pRob);
+
+        TASK_RESULT PressButtons(Robot * const pRob);
+
+        TASK_RESULT DriveToCubby(Robot * const pRob);
+
+        TASK_RESULT DepositSaltBag(Robot * const pRob);
+
+        TASK_RESULT DriveToToggle(Robot * const pRob);
+
+        TASK_RESULT PressToggle(Robot * const pRob);
     }
 }
 
