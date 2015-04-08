@@ -111,8 +111,18 @@ namespace G8
         void DriveBackward(float inches, float percentPower);
 
 
+        /**
+         * @brief Drives the robot forward to a specific point
+         * @param inches        The point to drive to
+         * @param percentPower  The desired power as a percent
+         */
         void DriveForwardTo(Point const point, float const percentPower);
 
+        /**
+         * @brief Drives the robot backward to a specific point
+         * @param inches        The point to drive to
+         * @param percentPower  The desired power as a percent
+         */
         void DriveBackwardTo(Point const point, float const percentPower);
 
     };

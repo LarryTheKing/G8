@@ -45,7 +45,7 @@ namespace G8
         // Navigation constants
         CONST.Add<int>  ("RPS_SAMPLES", 2, C_TYPE_INT | C_TYPE_UNSIGNED);
         CONST.Add<int>  ("MAX_MOV_COR", 6, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct rotation
-        CONST.Add<int>  ("MAX_ROT_COR", 20, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct movement
+        CONST.Add<int>  ("MAX_ROT_COR", 30, C_TYPE_INT | C_TYPE_UNSIGNED);// The max number tries to correct movement
         CONST.Add<float>("MOV_TOL",     0.5f, C_TYPE_FLOAT);    // Movement tolerance
         CONST.Add<float>("ROT_TOL",     1.2f, C_TYPE_FLOAT);    // Rotation tolerance
 
@@ -56,10 +56,26 @@ namespace G8
         CONST.Add<int>  ("PIN_BUTTON_R",    16, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for red button FEHIO::P2_0
         CONST.Add<int>  ("PIN_BUTTON_W",    17, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for white button FEHIO::P2_1
         CONST.Add<int>  ("PIN_BUTTON_B",    18, C_TYPE_INT | C_TYPE_UNSIGNED); // Solenoid for blue button FEHIO::P2_2
+
+        CONST.Add<int>  ("SOL_MAX_TRY",     4,   C_TYPE_INT | C_TYPE_UNSIGNED); // How many times to try and hit a solenoid
+        CONST.Add<int>  ("SOL_FIRE_MS",     200, C_TYPE_INT | C_TYPE_UNSIGNED); // How long to power on a solenoid
+        CONST.Add<int>  ("SOL_WAIT_MS",     500, C_TYPE_INT | C_TYPE_UNSIGNED); // How long to wait before refiring
+
+    }
+
+    void DisablePins(void)
+    {
+        DigitalOutputPin solR(static_cast<FEHIO::FEHIOPin>(CONST.GetVal<int>("PIN_BUTTON_R")));
+        DigitalOutputPin solW(static_cast<FEHIO::FEHIOPin>(CONST.GetVal<int>("PIN_BUTTON_W")));
+        DigitalOutputPin solB(static_cast<FEHIO::FEHIOPin>(CONST.GetVal<int>("PIN_BUTTON_B")));
+        solR.Write(false);
+        solW.Write(false);
+        solB.Write(false);
     }
 
     void DefineTasks(void)
     {
+        DisablePins();
         TASK.AddTask("Main",            Tasks::Main);
         TASK.AddTask("Diagnostics",     Tasks::Diagnostics);
 
